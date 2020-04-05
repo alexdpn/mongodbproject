@@ -1,14 +1,18 @@
-package com.project.mongodb;
+package com.project.mongodb.helper;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.function.Consumer;
 
+import com.mongodb.ConnectionString;
 import com.mongodb.MongoClientSettings;
 import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.project.mongodb.model.Address;
+import com.project.mongodb.model.Company;
+import com.project.mongodb.model.Office;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
@@ -17,20 +21,27 @@ import static com.mongodb.client.model.Filters.*;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
-
 public class MongoDbHelper {
-    private MongoCollection<Company> mongoCollection;
+    private static MongoCollection<Company> mongoCollection;
+    private static final String DATABASE = "pojodb";
+    private static final String COLLECTION = "companies";
+    private static final String CONNECTION_STRING = "mongodb://localhost:27017";
 
-    public MongoDbHelper(){
+    static {
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
         MongoClient mongoClient = MongoClients.create(
-                MongoClientSettings.builder().codecRegistry(codecRegistry).build());
+                MongoClientSettings.builder()
+                        .codecRegistry(codecRegistry)
+                        .applyConnectionString(new ConnectionString(CONNECTION_STRING))
+                        .build());
 
-        MongoDatabase mongoDatabase = mongoClient.getDatabase("pojodb");
-        mongoCollection = mongoDatabase.getCollection("companies", Company.class);
+        MongoDatabase mongoDatabase = mongoClient.getDatabase(DATABASE);
+        mongoCollection = mongoDatabase.getCollection(COLLECTION, Company.class);
     }
+
+    public MongoDbHelper(){ }
 
     public MongoCollection<Company> getMongoCollection() {
         return this.mongoCollection;

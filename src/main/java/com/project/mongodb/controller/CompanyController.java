@@ -1,9 +1,10 @@
-package com.project.mongodb;
+package com.project.mongodb.controller;
 
 import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,12 +18,16 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
+import com.project.mongodb.helper.MongoDbHelper;
+import com.project.mongodb.model.Address;
+import com.project.mongodb.model.Company;
+import com.project.mongodb.model.Office;
 import org.bson.types.ObjectId;
 
 import static com.mongodb.client.model.Sorts.*;
 
 @Path("/app")
-public class MongoRest {
+public class CompanyController {
 
     MongoDbHelper mongo = new MongoDbHelper();
 
@@ -67,11 +72,11 @@ public class MongoRest {
                 flag = true;
         }
 
-        if(flag == false)
+        if(flag == false) {
             return Response
                     .status(Response.Status.BAD_REQUEST)
                     .build();
-        else {
+        }else {
             mongo.deleteCompanyById(id);
 
             return Response
@@ -119,9 +124,7 @@ public class MongoRest {
             return Response
                     .status(Response.Status.CREATED)
                     .build();
-        }
-        else
-        {
+        }else {
             mongo.replaceCompany(id, company);
             return Response
                     .status(Response.Status.OK)

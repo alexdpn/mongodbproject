@@ -1,4 +1,6 @@
-package com.project.mongodb;
+package com.project.mongodb.model;
+
+import com.project.mongodb.model.Address;
 
 import javax.xml.bind.annotation.XmlElement;
 import javax.xml.bind.annotation.XmlRootElement;

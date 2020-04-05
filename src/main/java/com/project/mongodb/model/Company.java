@@ -1,5 +1,6 @@
-package com.project.mongodb;
+package com.project.mongodb.model;
 
+import com.project.mongodb.model.adapter.ObjectIdAdapter;
 import org.bson.types.ObjectId;
 
 import javax.xml.bind.annotation.XmlElement;
