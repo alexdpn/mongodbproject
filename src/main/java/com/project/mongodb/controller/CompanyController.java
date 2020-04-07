@@ -4,7 +4,6 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
-import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -23,13 +22,17 @@ import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import static com.mongodb.client.model.Sorts.*;
 
 @Path("/app")
 public class CompanyController {
 
-    MongoDbHelper mongo = new MongoDbHelper();
+    private static final Logger logger = LoggerFactory.getLogger(CompanyController.class);
+
+    private final MongoDbHelper mongo = new MongoDbHelper();
 
     @GET
     @Path("/companies")
@@ -65,18 +68,21 @@ public class CompanyController {
         List<ObjectId> list = new ArrayList<>(20);
         mongo.getCompanies().forEach(company -> list.add(company.getId()));
 
+        logger.info("Searching company with id {}", id);
         boolean flag = false;
-        for(ObjectId objectId : list)
-        {
+        for(ObjectId objectId : list) {
             if(objectId.toString().equals(new ObjectId(id).toString()))
                 flag = true;
         }
 
         if(!flag) {
+            logger.warn("Company not found for id {}", id);
             return Response
                     .status(Response.Status.BAD_REQUEST)
                     .build();
         } else {
+            logger.info("Deleting company with id {}", id);;
+
             mongo.deleteCompanyById(id);
 
             return Response
@@ -89,6 +95,8 @@ public class CompanyController {
     @Path("/companies")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insertCompany(Company company, @Context UriInfo uriInfo){
+        logger.info("Inserting company {} ", company);
+
         mongo.insertCompany(company);
 
         Company company2 = mongo.getMongoCollection()
@@ -120,12 +128,18 @@ public class CompanyController {
         }
 
         if(!flag) {
+            logger.info("Inserting company {} ", company);
+
             mongo.insertCompany(company);
+
             return Response
                     .status(Response.Status.CREATED)
                     .build();
         } else {
+            logger.info("Updating company with id {}", id);
+
             mongo.replaceCompany(id, company);
+
             return Response
                     .status(Response.Status.OK)
                     .build();
