@@ -72,11 +72,11 @@ public class CompanyController {
                 flag = true;
         }
 
-        if(flag == false) {
+        if(!flag) {
             return Response
                     .status(Response.Status.BAD_REQUEST)
                     .build();
-        }else {
+        } else {
             mongo.deleteCompanyById(id);
 
             return Response
@@ -114,17 +114,17 @@ public class CompanyController {
         List<Company> list = mongo.getCompanies();
         boolean flag = false;
 
-        for(Company companyFromList : list){
+        for(Company companyFromList : list) {
             if(new ObjectId(id).toString().equals(companyFromList.getId().toString()))
                 flag = true;
         }
 
-        if(flag == false) {
+        if(!flag) {
             mongo.insertCompany(company);
             return Response
                     .status(Response.Status.CREATED)
                     .build();
-        }else {
+        } else {
             mongo.replaceCompany(id, company);
             return Response
                     .status(Response.Status.OK)
