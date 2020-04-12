@@ -1,9 +1,11 @@
+import com.project.mongodb.config.CompanyBinder;
 import com.project.mongodb.controller.CompanyController;
 import com.project.mongodb.helper.EmbeddedMongoDbHelper;
 import com.project.mongodb.helper.MongoDBRepository;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
+import org.jboss.weld.environment.se.Weld;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
 
@@ -32,18 +34,21 @@ public class RestMongoTest {
     private static URI uri;
     private static HttpServer server;
     private static EmbeddedMongoDbHelper db;
-    private static MongoDBRepository mongoDbHelper;
+    private static MongoDBRepository mongoDBRepository;
+    private static Weld weld;
 
     @BeforeClass
     public static void startHttpServer(){
         uri = UriBuilder.fromUri("http://localhost/").port(4000).build();
         ResourceConfig config = new ResourceConfig(CompanyController.class);
+        config.register(new CompanyBinder());
         server = JdkHttpServerFactory.createHttpServer(uri, config);
 
-        db = new EmbeddedMongoDbHelper();
-        db.startDatabase();
+        EmbeddedMongoDbHelper.startDatabase();
 
-        mongoDbHelper = new MongoDBRepository();
+        mongoDBRepository = new MongoDBRepository();
+
+        weld = new Weld();
     }
 
     @Test
@@ -85,7 +90,7 @@ public class RestMongoTest {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(uri).path("app");
 
-        List<Company> list = mongoDbHelper.getCompanies();
+        List<Company> list = mongoDBRepository.getCompanies();
         list.forEach(company -> assertEquals(company.toString(), target.path("companies")
                                                                         .path(company.getId().toString())
                                                                         .request(MediaType.APPLICATION_JSON)
@@ -97,7 +102,7 @@ public class RestMongoTest {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(uri).path("app");
 
-        String lastId = mongoDbHelper.getMongoCollection()
+        String lastId = mongoDBRepository.getMongoCollection()
                                 .find().sort(descending("_id"))
                                 .limit(1).first()
                                 .getId().toString();
@@ -118,7 +123,7 @@ public class RestMongoTest {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(uri).path("app");
 
-        String firstId = mongoDbHelper.getMongoCollection().find().first().getId().toString();
+        String firstId = mongoDBRepository.getMongoCollection().find().first().getId().toString();
         int status = target.path("companies").path(firstId).request().delete().getStatus();
 
         assertEquals(204, status);
@@ -127,6 +132,7 @@ public class RestMongoTest {
     @AfterClass
     public static void stopServer(){
         server.stop(0);
-        db.stopDatabase();
+        EmbeddedMongoDbHelper.stopDatabase();
+        weld.shutdown();
     }
 }
