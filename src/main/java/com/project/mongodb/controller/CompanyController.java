@@ -4,6 +4,7 @@ import java.net.URI;
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.inject.Inject;
 import javax.ws.rs.Consumes;
 import javax.ws.rs.DELETE;
 import javax.ws.rs.GET;
@@ -17,7 +18,7 @@ import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
-import com.project.mongodb.helper.MongoDbHelper;
+import com.project.mongodb.helper.MongoDBRepository;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
@@ -32,7 +33,8 @@ public class CompanyController {
 
     private static final Logger logger = LoggerFactory.getLogger(CompanyController.class);
 
-    private final MongoDbHelper mongo = new MongoDbHelper();
+    @Inject
+    private MongoDBRepository mongo;
 
     @GET
     @Path("/companies")

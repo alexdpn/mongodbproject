@@ -17,11 +17,14 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
 
+import javax.inject.Singleton;
+
 import static com.mongodb.client.model.Filters.*;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
-public class MongoDbHelper {
+@Singleton
+public class MongoDBRepository {
     private static MongoCollection<Company> mongoCollection;
     private static final String DATABASE = "pojodb";
     private static final String COLLECTION = "companies";
@@ -41,7 +44,8 @@ public class MongoDbHelper {
         mongoCollection = mongoDatabase.getCollection(COLLECTION, Company.class);
     }
 
-    public MongoDbHelper(){ }
+    public MongoDBRepository(){
+    }
 
     public MongoCollection<Company> getMongoCollection() {
         return this.mongoCollection;

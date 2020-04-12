@@ -1,6 +1,6 @@
 import com.project.mongodb.controller.CompanyController;
 import com.project.mongodb.helper.EmbeddedMongoDbHelper;
-import com.project.mongodb.helper.MongoDbHelper;
+import com.project.mongodb.helper.MongoDBRepository;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
@@ -32,7 +32,7 @@ public class RestMongoTest {
     private static URI uri;
     private static HttpServer server;
     private static EmbeddedMongoDbHelper db;
-    private static MongoDbHelper mongoDbHelper;
+    private static MongoDBRepository mongoDbHelper;
 
     @BeforeClass
     public static void startHttpServer(){
@@ -43,7 +43,7 @@ public class RestMongoTest {
         db = new EmbeddedMongoDbHelper();
         db.startDatabase();
 
-        mongoDbHelper = new MongoDbHelper();
+        mongoDbHelper = new MongoDBRepository();
     }
 
     @Test

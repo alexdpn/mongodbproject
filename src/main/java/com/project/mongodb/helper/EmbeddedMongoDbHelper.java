@@ -13,27 +13,29 @@ public class EmbeddedMongoDbHelper {
 
     private static final String HOST = "localhost";
     private static final int PORT = 27017;
-    private MongodExecutable executable;
+    private static MongodExecutable executable;
 
-    public IMongodConfig createConfiguration() throws Exception{
+    public static IMongodConfig createConfiguration() throws Exception{
         return new MongodConfigBuilder()
                 .version(Version.Main.V4_0)
                 .net(new Net(HOST, PORT, Network.localhostIsIPv6()))
                 .build();
     }
 
-    public void startDatabase() {
+    public static void startDatabase() {
         MongodStarter starter = MongodStarter.getDefaultInstance();
         try {
             executable = starter.prepare(createConfiguration());
             MongodProcess process = executable.start();
+            System.out.println(process.getProcessId());
+            System.out.println(process.isProcessRunning());
         }catch (Exception e) {
             //do something
             e.printStackTrace();
         }
     }
 
-    public void stopDatabase() {
+    public static void stopDatabase() {
         executable.stop();
     }
 }
