@@ -1,7 +1,7 @@
 import com.project.mongodb.config.CompanyBinder;
 import com.project.mongodb.controller.CompanyController;
 import com.project.mongodb.helper.EmbeddedMongoDbHelper;
-import com.project.mongodb.helper.MongoDBRepository;
+import com.project.mongodb.repository.CompanyRepository;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
@@ -32,10 +32,10 @@ import java.util.Arrays;
 public class RestMongoTest {
 
     private static URI uri;
-    private static HttpServer server;
-    private static EmbeddedMongoDbHelper db;
-    private static MongoDBRepository mongoDBRepository;
     private static Weld weld;
+    private static HttpServer server;
+    private static CompanyRepository companyRepository;
+
 
     @BeforeClass
     public static void startHttpServer(){
@@ -46,7 +46,7 @@ public class RestMongoTest {
 
         EmbeddedMongoDbHelper.startDatabase();
 
-        mongoDBRepository = new MongoDBRepository();
+        companyRepository = new CompanyRepository();
 
         weld = new Weld();
     }
@@ -74,6 +74,7 @@ public class RestMongoTest {
                                 new Address("Australia", "Sydney", "Kangaroo Street, Nr. 60D")))
         );
 
+
         List<Integer> listOfStatusCodes = new ArrayList<>(5);
 
         list.forEach(company -> listOfStatusCodes.add(target.path("companies")
@@ -90,7 +91,7 @@ public class RestMongoTest {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(uri).path("app");
 
-        List<Company> list = mongoDBRepository.getCompanies();
+        List<Company> list = companyRepository.getCompanies();
         list.forEach(company -> assertEquals(company.toString(), target.path("companies")
                                                                         .path(company.getId().toString())
                                                                         .request(MediaType.APPLICATION_JSON)
@@ -102,7 +103,7 @@ public class RestMongoTest {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(uri).path("app");
 
-        String lastId = mongoDBRepository.getMongoCollection()
+        String lastId = companyRepository.getMongoCollection()
                                 .find().sort(descending("_id"))
                                 .limit(1).first()
                                 .getId().toString();
@@ -123,7 +124,7 @@ public class RestMongoTest {
         Client client = ClientBuilder.newClient();
         WebTarget target = client.target(uri).path("app");
 
-        String firstId = mongoDBRepository.getMongoCollection().find().first().getId().toString();
+        String firstId = companyRepository.getMongoCollection().find().first().getId().toString();
         int status = target.path("companies").path(firstId).request().delete().getStatus();
 
         assertEquals(204, status);

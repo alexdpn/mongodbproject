@@ -1,4 +1,4 @@
-package com.project.mongodb.helper;
+package com.project.mongodb.repository;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,6 +10,7 @@ import com.mongodb.client.MongoDatabase;
 import com.mongodb.client.MongoCollection;
 import com.mongodb.client.MongoClient;
 import com.mongodb.client.MongoClients;
+import com.project.mongodb.helper.EmbeddedMongoDbHelper;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
@@ -17,6 +18,8 @@ import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
 
+import javax.annotation.PostConstruct;
+import javax.annotation.PreDestroy;
 import javax.inject.Singleton;
 
 import static com.mongodb.client.model.Filters.*;
@@ -24,17 +27,20 @@ import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 @Singleton
-public class MongoDBRepository {
+public class CompanyRepository {
     private static MongoCollection<Company> mongoCollection;
     private static final String DATABASE = "pojodb";
     private static final String COLLECTION = "companies";
     private static final String CONNECTION_STRING = "mongodb://localhost:27017";
+    private MongoClient mongoClient;
 
-    static {
+    @PostConstruct
+    public void init() {
+
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
-        MongoClient mongoClient = MongoClients.create(
+        mongoClient = MongoClients.create(
                 MongoClientSettings.builder()
                         .codecRegistry(codecRegistry)
                         .applyConnectionString(new ConnectionString(CONNECTION_STRING))
@@ -44,7 +50,7 @@ public class MongoDBRepository {
         mongoCollection = mongoDatabase.getCollection(COLLECTION, Company.class);
     }
 
-    public MongoDBRepository(){
+    public CompanyRepository(){
     }
 
     public MongoCollection<Company> getMongoCollection() {
@@ -88,5 +94,11 @@ public class MongoDBRepository {
 
     public void replaceCompany(String id, Company company){
        mongoCollection.replaceOne(eq("_id", new ObjectId(id)), company);
+    }
+
+    @PreDestroy
+    public void cleanUp() {
+        mongoClient.close();
+        EmbeddedMongoDbHelper.stopDatabase();
     }
 }
