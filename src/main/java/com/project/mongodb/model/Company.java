@@ -2,12 +2,13 @@ package com.project.mongodb.model;
 
 import com.fasterxml.jackson.databind.annotation.JsonDeserialize;
 import com.fasterxml.jackson.databind.annotation.JsonSerialize;
+import com.project.mongodb.config.JsonConfiguration;
 import org.bson.types.ObjectId;
 
 public class Company {
 
-    @JsonSerialize(using = Serializer.ObjectIdSerializer.class)
-    @JsonDeserialize(using = Serializer.ObjectIdDeserializer.class)
+    @JsonSerialize(using = JsonConfiguration.ObjectIdSerializer.class)
+    @JsonDeserialize(using = JsonConfiguration.ObjectIdDeserializer.class)
     private ObjectId id;
 
     private String name;

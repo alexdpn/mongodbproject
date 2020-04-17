@@ -52,7 +52,6 @@ public class CompanyRepository {
             companies.forEach(company -> mongoCollection.insertOne(company));
     }
 
-
     public CompanyRepository(){
     }
 

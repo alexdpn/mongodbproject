@@ -1,4 +1,4 @@
-package com.project.mongodb.model;
+package com.project.mongodb.config;
 
 import com.fasterxml.jackson.core.JsonGenerator;
 import com.fasterxml.jackson.core.JsonParser;
@@ -8,7 +8,7 @@ import org.bson.types.ObjectId;
 
 import java.io.IOException;
 
-public class Serializer {
+public class JsonConfiguration {
 
     public static class ObjectIdSerializer extends JsonSerializer<ObjectId> {
         @Override
