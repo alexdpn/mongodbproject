@@ -24,7 +24,6 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.MediaType;
 
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 
 public class RestMongoTest {
@@ -61,13 +60,10 @@ public class RestMongoTest {
     @Test
     public void testGet(){
         List<Company> list = companyRepository.getCompanies();
-        List<Company> list2 = new ArrayList<>(5);
-        list.forEach(company -> list2.add(target.path("companies")
+        list.forEach(company -> assertEquals(company.toString(), target.path("companies")
                                                                         .path(company.getId().toString())
                                                                         .request(MediaType.APPLICATION_JSON)
-                                                                        .get(Company.class )));
-
-        System.out.print(list2);
+                                                                        .get(Company.class ).toString()));
     }
 
     @Test
