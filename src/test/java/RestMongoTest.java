@@ -5,6 +5,7 @@ import com.project.mongodb.repository.CompanyRepository;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.jboss.weld.environment.se.Weld;
 import org.junit.*;
 import org.junit.runners.MethodSorters;
@@ -35,7 +36,8 @@ public class RestMongoTest {
     private static Weld weld;
     private static HttpServer server;
     private static CompanyRepository companyRepository;
-
+    private static Client client;
+    private static WebTarget target;
 
     @BeforeClass
     public static void startHttpServer(){
@@ -49,12 +51,16 @@ public class RestMongoTest {
         companyRepository = new CompanyRepository();
 
         weld = new Weld();
+
+        client = ClientBuilder.newBuilder()
+                              .register(JacksonFeature.class)
+                              .build();
+
+        target = client.target(uri).path("app");
     }
 
     @Test
     public void testPost(){
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(uri).path("app");
 
         List<Company> list = Arrays.asList(
                 new Company("Good Technology Inc", "Tom", "android applications",
@@ -75,6 +81,8 @@ public class RestMongoTest {
         );
 
 
+
+
         List<Integer> listOfStatusCodes = new ArrayList<>(5);
 
         list.forEach(company -> listOfStatusCodes.add(target.path("companies")
@@ -88,9 +96,6 @@ public class RestMongoTest {
 
     @Test
     public void testQGet(){
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(uri).path("app");
-
         List<Company> list = companyRepository.getCompanies();
         list.forEach(company -> assertEquals(company.toString(), target.path("companies")
                                                                         .path(company.getId().toString())
@@ -100,9 +105,6 @@ public class RestMongoTest {
 
     @Test
     public void testQPut(){
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(uri).path("app");
-
         String lastId = companyRepository.getMongoCollection()
                                 .find().sort(descending("_id"))
                                 .limit(1).first()
@@ -121,9 +123,6 @@ public class RestMongoTest {
 
     @Test
     public void testQDelete() {
-        Client client = ClientBuilder.newClient();
-        WebTarget target = client.target(uri).path("app");
-
         String firstId = companyRepository.getMongoCollection().find().first().getId().toString();
         int status = target.path("companies").path(firstId).request().delete().getStatus();
 
