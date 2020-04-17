@@ -6,6 +6,7 @@ import com.project.mongodb.helper.EmbeddedMongoDbHelper;
 import com.sun.net.httpserver.HttpServer;
 import javax.ws.rs.core.UriBuilder;
 
+import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.server.ResourceConfig;
 import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.jboss.weld.environment.se.Weld;
@@ -23,6 +24,7 @@ public class RestApp {
         URI uri = UriBuilder.fromUri("http://localhost/").port(4000).build();
         ResourceConfig resourceConfig = new ResourceConfig(CompanyController.class);
         resourceConfig.register(new CompanyBinder());
+        resourceConfig.register(JacksonFeature.class);
 
         logger.info("Starting Weld");
         Weld weld = new Weld();

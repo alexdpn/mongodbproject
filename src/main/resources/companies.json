@@ -1,0 +1,82 @@
+[
+  {
+    "name":"Good Technology Inc",
+    "ceo":"Tom",
+    "areaOfActivity":"android applications",
+    "office":{
+      "address":{
+        "country":"Ireland",
+        "city":"Dublin",
+        "street":"Green Street, Nr. 100A"
+
+      },
+      "numberOfWorkers":500
+
+    }
+
+  },
+  {
+    "name":"Beer Ltd.",
+    "ceo":"Mary",
+    "areaOfActivity":"beer",
+    "office":{
+      "address":{
+        "country":"Canada",
+        "city":"Toronto",
+        "street":"Queen's Street, Nr.25"
+
+      },
+      "numberOfWorkers":400
+
+    }
+
+  },
+  {
+    "name":"Red Wine Inc.",
+    "ceo":"Louis",
+    "areaOfActivity":"production of wine",
+    "office":{
+      "address":{
+        "country":"Germany",
+        "city":"Berlin",
+        "street":"Beer Street, Nr. 200B"
+
+      },
+      "numberOfWorkers":300
+
+    }
+
+  },
+  {
+    "name":"Surf Ltd",
+    "ceo":"Mike",
+    "areaOfActivity":"production of surfboards",
+    "office":{
+      "address":{
+        "country":"USA",
+        "city":"Los Angeles",
+        "street":"Ocean Street, Nr. 200C"
+
+      },
+      "numberOfWorkers":170
+
+    }
+
+  },
+  {
+    "name":"Sound of Artists",
+    "ceo":"Mark",
+    "areaOfActivity":"music production",
+    "office":{
+      "address":{
+        "country":"Australia",
+        "city":"Sydney",
+        "street":"Kangaroo Street, Nr. 60D"
+
+      },
+      "numberOfWorkers":200
+
+    }
+
+  }
+]

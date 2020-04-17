@@ -14,11 +14,11 @@ import com.project.mongodb.helper.EmbeddedMongoDbHelper;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
+import com.project.mongodb.util.DataUtil;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
 
-import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 import javax.inject.Singleton;
 
@@ -32,11 +32,9 @@ public class CompanyRepository {
     private static final String DATABASE = "pojodb";
     private static final String COLLECTION = "companies";
     private static final String CONNECTION_STRING = "mongodb://localhost:27017";
-    private MongoClient mongoClient;
+    private static MongoClient mongoClient;
 
-    @PostConstruct
-    public void init() {
-
+    static {
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
@@ -48,7 +46,12 @@ public class CompanyRepository {
 
         MongoDatabase mongoDatabase = mongoClient.getDatabase(DATABASE);
         mongoCollection = mongoDatabase.getCollection(COLLECTION, Company.class);
+
+        List<Company> companies = DataUtil.getCompaniesFromJsonFile();
+        if (companies != null)
+            companies.forEach(company -> mongoCollection.insertOne(company));
     }
+
 
     public CompanyRepository(){
     }
