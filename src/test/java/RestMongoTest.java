@@ -8,7 +8,6 @@ import com.project.mongodb.model.Office;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.jboss.weld.environment.se.Weld;
 import org.junit.*;
-import org.junit.runners.MethodSorters;
 
 import static org.junit.Assert.*;
 import static com.mongodb.client.model.Sorts.*;
@@ -25,11 +24,9 @@ import javax.ws.rs.core.UriBuilder;
 import javax.ws.rs.core.MediaType;
 
 import java.net.URI;
-import java.util.List;
 import java.util.ArrayList;
-import java.util.Arrays;
+import java.util.List;
 
-@FixMethodOrder(MethodSorters.NAME_ASCENDING)
 public class RestMongoTest {
 
     private static URI uri;
@@ -44,6 +41,7 @@ public class RestMongoTest {
         uri = UriBuilder.fromUri("http://localhost/").port(4000).build();
         ResourceConfig config = new ResourceConfig(CompanyController.class);
         config.register(new CompanyBinder());
+        config.register(JacksonFeature.class);
         server = JdkHttpServerFactory.createHttpServer(uri, config);
 
         EmbeddedMongoDbHelper.startDatabase();
@@ -57,54 +55,23 @@ public class RestMongoTest {
                               .build();
 
         target = client.target(uri).path("app");
+
     }
 
     @Test
-    public void testPost(){
-
-        List<Company> list = Arrays.asList(
-                new Company("Good Technology Inc", "Tom", "android applications",
-                        new Office(500,
-                                new Address("Ireland", "Dublin", "Green Street, Nr. 100A"))),
-                new Company("Beer Ltd.", "Mary", "beer",
-                        new Office(400,
-                                new Address("Canada", "Toronto", "Queen's Street, Nr.25"))),
-                new Company("Red Wine Inc.", "Louis",  "production of wine",
-                        new Office(300,
-                                new Address("Germany", "Berlin", "Beer Street, Nr. 200B"))),
-                new Company("Surf Ltd", "Mike", "production of surfboards",
-                        new Office(170,
-                                new Address("USA", "Los Angeles", "Ocean Street, Nr. 200C"))),
-                new Company("Sound of Artists", "Mark", "music production",
-                        new Office(200,
-                                new Address("Australia", "Sydney", "Kangaroo Street, Nr. 60D")))
-        );
-
-
-
-
-        List<Integer> listOfStatusCodes = new ArrayList<>(5);
-
-        list.forEach(company -> listOfStatusCodes.add(target.path("companies")
-                                                            .request()
-                                                            .post(Entity.entity(company, MediaType.APPLICATION_JSON))
-                                                            .getStatus()));
-
-        listOfStatusCodes.forEach(status -> assertEquals(201, status.longValue()));
-    }
-
-
-    @Test
-    public void testQGet(){
+    public void testGet(){
         List<Company> list = companyRepository.getCompanies();
-        list.forEach(company -> assertEquals(company.toString(), target.path("companies")
+        List<Company> list2 = new ArrayList<>(5);
+        list.forEach(company -> list2.add(target.path("companies")
                                                                         .path(company.getId().toString())
                                                                         .request(MediaType.APPLICATION_JSON)
-                                                                        .get(Company.class ).toString()));
+                                                                        .get(Company.class )));
+
+        System.out.print(list2);
     }
 
     @Test
-    public void testQPut(){
+    public void testPut(){
         String lastId = companyRepository.getMongoCollection()
                                 .find().sort(descending("_id"))
                                 .limit(1).first()
@@ -122,7 +89,7 @@ public class RestMongoTest {
     }
 
     @Test
-    public void testQDelete() {
+    public void testDelete() {
         String firstId = companyRepository.getMongoCollection().find().first().getId().toString();
         int status = target.path("companies").path(firstId).request().delete().getStatus();
 
