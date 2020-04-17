@@ -18,6 +18,8 @@ import com.project.mongodb.util.DataUtil;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 
 import javax.annotation.PreDestroy;
 import javax.inject.Singleton;
@@ -28,6 +30,8 @@ import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 @Singleton
 public class CompanyRepository {
+    private static final Logger logger = LoggerFactory.getLogger(CompanyRepository.class);
+
     private static MongoCollection<Company> mongoCollection;
     private static final String DATABASE = "pojodb";
     private static final String COLLECTION = "companies";
@@ -38,6 +42,7 @@ public class CompanyRepository {
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
+        logger.info("Configuring MongoDb Client");
         mongoClient = MongoClients.create(
                 MongoClientSettings.builder()
                         .codecRegistry(codecRegistry)
@@ -47,6 +52,7 @@ public class CompanyRepository {
         MongoDatabase mongoDatabase = mongoClient.getDatabase(DATABASE);
         mongoCollection = mongoDatabase.getCollection(COLLECTION, Company.class);
 
+        logger.info("Inserting default list of companies into the database");
         List<Company> companies = DataUtil.getCompaniesFromJsonFile();
         if (companies != null)
             companies.forEach(company -> mongoCollection.insertOne(company));
