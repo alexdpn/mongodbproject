@@ -8,7 +8,6 @@ import org.bson.types.ObjectId;
 public class Company {
 
     @JsonSerialize(using = JsonConfiguration.ObjectIdSerializer.class)
-    @JsonDeserialize(using = JsonConfiguration.ObjectIdDeserializer.class)
     private ObjectId id;
 
     private String name;
