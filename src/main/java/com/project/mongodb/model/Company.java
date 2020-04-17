@@ -1,24 +1,21 @@
 package com.project.mongodb.model;
 
-import com.project.mongodb.model.adapter.ObjectIdAdapter;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.bson.types.ObjectId;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-import javax.xml.bind.annotation.adapters.XmlJavaTypeAdapter;
-
-@XmlRootElement
-@XmlType(propOrder = {"id", "name", "ceo", "areaOfActivity", "office"})
 public class Company {
+
+//    @JsonSerialize(using = Serializer.ObjectIdSerializer.class)
+//    @JsonDeserialize(using = Serializer.ObjectIdDeserializer.class)
+    @JsonIgnore
     private ObjectId id;
+
     private String name;
     private String ceo;
     private String areaOfActivity;
     private Office office;
 
     public Company(){}
-
 
     public Company(String name, String ceo, String areaOfActivity, Office office) {
         this.name = name;
@@ -27,28 +24,22 @@ public class Company {
         this.office = office;
     }
 
-
-    @XmlJavaTypeAdapter(ObjectIdAdapter.class)
     public ObjectId getId(){
         return this.id;
     }
 
-    @XmlElement
     public String getName() {
         return this.name;
     }
 
-    @XmlElement
     public String getCeo(){
         return this.ceo;
     }
 
-    @XmlElement
     public String getAreaOfActivity() {
         return this.areaOfActivity;
     }
 
-    @XmlElement
     public Office getOffice(){
         return this.office;
     }

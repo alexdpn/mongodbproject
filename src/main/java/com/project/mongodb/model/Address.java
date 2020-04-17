@@ -1,11 +1,5 @@
 package com.project.mongodb.model;
 
-import javax.xml.bind.annotation.XmlElement;
-import javax.xml.bind.annotation.XmlRootElement;
-import javax.xml.bind.annotation.XmlType;
-
-@XmlRootElement
-@XmlType(propOrder = {"country", "city", "street"})
 public class Address {
     public String country;
     public String city;
@@ -19,17 +13,14 @@ public class Address {
         this.street = street;
     }
 
-    @XmlElement
     public String getCountry(){
         return this.country;
     }
 
-    @XmlElement
     public String getCity(){
         return this.city;
     }
 
-    @XmlElement
     public String getStreet(){
         return this.street;
     }
