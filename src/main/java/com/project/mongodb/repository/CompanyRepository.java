@@ -79,16 +79,26 @@ public class CompanyRepository {
     }
 
     public Company getCompanyById(String id){
-        return mongoCollection
-                .find(eq("_id", new ObjectId(id)))
-                .first();
+        try {
+            return mongoCollection
+                    .find(eq("_id", new ObjectId(id)))
+                    .first();
+        } catch(IllegalArgumentException e) {
+            return null;
+        }
     }
 
     public Office getOffice(String id){
+        if(getCompanyById(id) == null || getCompanyById(id).getOffice() == null)
+            return null;
+
         return getCompanyById(id).getOffice();
     }
 
     public Address getAddress(String id){
+        if(getOffice(id) == null || getOffice(id).getAddress() == null)
+            return null;
+
         return getCompanyById(id).getOffice().getAddress();
     }
 

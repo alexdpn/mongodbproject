@@ -1,8 +1,12 @@
 package com.project.mongodb.service;
 
+import com.project.mongodb.exception.AddressNotFoundException;
+import com.project.mongodb.exception.CompanyNotFoundException;
+import com.project.mongodb.exception.OfficeNotFoundException;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
+import com.project.mongodb.model.error.Error;
 import com.project.mongodb.repository.CompanyRepository;
 import org.bson.types.ObjectId;
 import org.slf4j.Logger;
@@ -30,15 +34,30 @@ public class CompanyService {
         return companyRepository.getCompanies();
     }
 
-    public Company getCompanyById(String id) {
-        return companyRepository.getCompanyById(id);
+    public Company getCompanyById(String id) throws CompanyNotFoundException {
+        Company company = companyRepository.getCompanyById(id);
+
+        if(company == null)
+            throw new CompanyNotFoundException(new Error(id, "Company with id " + id + " was not found on this server"));
+
+        return company;
     }
 
-    public Office getOffice(String id) {
-        return companyRepository.getOffice(id);
+    public Office getOffice(String id) throws OfficeNotFoundException {
+        Office office = companyRepository.getOffice(id);
+
+        if(office == null)
+            throw new OfficeNotFoundException(new Error(id, "Office was not found for company with id " + id));
+
+        return office;
     }
 
-    public Address getAddress(String id) {
+    public Address getAddress(String id) throws AddressNotFoundException {
+        Address address = companyRepository.getAddress(id);
+
+        if(address == null)
+            throw new AddressNotFoundException(new Error(id, "Address was not found for company with id " + id));
+
         return companyRepository.getAddress(id);
     }
 
@@ -55,12 +74,9 @@ public class CompanyService {
 
         if(!flag) {
             logger.warn("Company not found for id {}", id);
-            return Response
-                    .status(Response.Status.BAD_REQUEST)
-                    .build();
+            throw new CompanyNotFoundException(new Error(id, "Company with id " + id + " was not found on this server"));
         } else {
             logger.info("Deleting company with id {}", id);;
-
             companyRepository.deleteCompanyById(id);
 
             return Response
