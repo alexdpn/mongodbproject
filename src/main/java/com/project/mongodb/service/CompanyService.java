@@ -13,7 +13,6 @@ import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
 import javax.inject.Inject;
-import javax.inject.Singleton;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 import java.net.URI;
@@ -22,7 +21,6 @@ import java.util.List;
 
 import static com.mongodb.client.model.Sorts.descending;
 
-@Singleton
 public class CompanyService {
 
     private static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
