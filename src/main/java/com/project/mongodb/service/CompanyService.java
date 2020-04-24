@@ -61,7 +61,7 @@ public class CompanyService {
         return companyRepository.getAddress(id);
     }
 
-    public Response deleteCompany(String id){
+    public Response deleteCompany(String id) throws CompanyNotFoundException {
         List<ObjectId> list = new ArrayList<>(20);
         companyRepository.getCompanies().forEach(company -> list.add(company.getId()));
 

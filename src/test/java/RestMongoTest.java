@@ -5,6 +5,8 @@ import com.project.mongodb.repository.CompanyRepository;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
+import org.glassfish.grizzly.http.server.HttpServer;
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.jboss.weld.environment.se.Weld;
 import org.junit.*;
@@ -12,8 +14,6 @@ import org.junit.*;
 import static org.junit.Assert.*;
 import static com.mongodb.client.model.Sorts.*;
 
-import com.sun.net.httpserver.HttpServer;
-import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.glassfish.jersey.server.ResourceConfig;
 
 import javax.ws.rs.client.Client;
@@ -41,7 +41,7 @@ public class RestMongoTest {
         ResourceConfig config = new ResourceConfig(CompanyController.class);
         config.register(new CompanyBinder());
         config.register(JacksonFeature.class);
-        server = JdkHttpServerFactory.createHttpServer(uri, config);
+        server = GrizzlyHttpServerFactory.createHttpServer(uri, config);
 
         EmbeddedMongoDbHelper.startDatabase();
 
@@ -94,7 +94,7 @@ public class RestMongoTest {
 
     @AfterClass
     public static void stopServer(){
-        server.stop(0);
+        server.shutdown();
         EmbeddedMongoDbHelper.stopDatabase();
         weld.shutdown();
     }

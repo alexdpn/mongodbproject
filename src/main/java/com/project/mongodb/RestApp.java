@@ -3,16 +3,18 @@ package com.project.mongodb;
 import com.project.mongodb.config.CompanyBinder;
 import com.project.mongodb.controller.CompanyController;
 import com.project.mongodb.helper.EmbeddedMongoDbHelper;
-import com.sun.net.httpserver.HttpServer;
+
 import javax.ws.rs.core.UriBuilder;
 
+import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.glassfish.jersey.jdkhttp.JdkHttpServerFactory;
 import org.jboss.weld.environment.se.Weld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+
+import org.glassfish.grizzly.http.server.HttpServer;
 
 import java.net.URI;
 
@@ -35,6 +37,6 @@ public class RestApp {
         EmbeddedMongoDbHelper.startDatabase();
 
         logger.info("Starting embedded http server on port {}", uri.getPort());
-        HttpServer httpServer = JdkHttpServerFactory.createHttpServer(uri, resourceConfig);
+        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(uri, resourceConfig);
     }
 }
