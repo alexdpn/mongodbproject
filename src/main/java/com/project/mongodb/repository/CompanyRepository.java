@@ -21,24 +21,26 @@ import org.bson.types.ObjectId;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
-import javax.inject.Singleton;
+
 
 import static com.mongodb.client.model.Filters.*;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
-@Singleton
 public class CompanyRepository {
     private static final Logger logger = LoggerFactory.getLogger(CompanyRepository.class);
 
-    private static MongoCollection<Company> mongoCollection;
     private static final String DATABASE = "pojodb";
     private static final String COLLECTION = "companies";
     private static final String CONNECTION_STRING = "mongodb://localhost:27017";
-    private static MongoClient mongoClient;
 
-    static {
+    private MongoCollection<Company> mongoCollection;
+    private MongoClient mongoClient;
+
+    @PostConstruct
+    public void init(){
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
@@ -116,6 +118,7 @@ public class CompanyRepository {
 
     @PreDestroy
     public void cleanUp() {
+        System.out.print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         mongoClient.close();
         EmbeddedMongoDbHelper.stopDatabase();
     }
