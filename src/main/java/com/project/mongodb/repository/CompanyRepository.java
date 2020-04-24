@@ -118,7 +118,6 @@ public class CompanyRepository {
 
     @PreDestroy
     public void cleanUp() {
-        System.out.print("AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA");
         mongoClient.close();
         EmbeddedMongoDbHelper.stopDatabase();
     }
