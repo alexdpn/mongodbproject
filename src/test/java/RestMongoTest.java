@@ -8,7 +8,6 @@ import com.project.mongodb.model.Office;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
-import org.jboss.weld.environment.se.Weld;
 import org.junit.*;
 
 import static org.junit.Assert.*;
@@ -29,7 +28,6 @@ import java.util.List;
 public class RestMongoTest {
 
     private static URI uri;
-    private static Weld weld;
     private static HttpServer server;
     private static CompanyRepository companyRepository;
     private static Client client;
@@ -46,8 +44,6 @@ public class RestMongoTest {
         EmbeddedMongoDbHelper.startDatabase();
 
         companyRepository = new CompanyRepository();
-
-        weld = new Weld();
 
         client = ClientBuilder.newBuilder()
                               .register(JacksonFeature.class)
@@ -96,6 +92,5 @@ public class RestMongoTest {
     public static void stopServer(){
         server.shutdown();
         EmbeddedMongoDbHelper.stopDatabase();
-        weld.shutdown();
     }
 }

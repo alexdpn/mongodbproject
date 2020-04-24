@@ -10,7 +10,6 @@ import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-import org.jboss.weld.environment.se.Weld;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
@@ -29,9 +28,6 @@ public class RestApp {
         resourceConfig.register(new CompanyBinder());
         resourceConfig.register(DeclarativeLinkingFeature.class);
         resourceConfig.register(JacksonFeature.class);
-
-        logger.info("Starting Weld");
-        Weld weld = new Weld();
 
         logger.info("Starting embedded database");
         EmbeddedMongoDbHelper.startDatabase();
