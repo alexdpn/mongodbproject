@@ -19,6 +19,6 @@ docker build --tag mongodbproject:1.0 .
 ```
 5. Start the container
 ```
-docker run --publish 4000:4000 --detach --name bb mongodbproject:1.0
+docker run --network host -d mongodbproject:1.0
 ```
 6. Access the endpoints
