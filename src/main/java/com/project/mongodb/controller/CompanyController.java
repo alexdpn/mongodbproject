@@ -21,60 +21,57 @@ import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
 import com.project.mongodb.service.CompanyService;
 
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
-@Path("/app")
+@Path("/app/v1/companies")
 public class CompanyController {
 
-    private static final Logger logger = LoggerFactory.getLogger(CompanyController.class);
+    private final CompanyService companyService;
 
     @Inject
-    private CompanyService companyService;
+    public CompanyController(CompanyService companyService) {
+        this.companyService = companyService;
+    }
 
     @GET
-    @Path("/companies")
     @Produces(MediaType.APPLICATION_JSON)
     public List<Company> getCompanies() {
         return companyService.getCompanies();
     }
 
     @GET
-    @Path("/companies/{id}")
+    @Path("/{id}")
     @Produces(MediaType.APPLICATION_JSON)
     public Company getCompanyById(@PathParam("id") String id){
         return companyService.getCompanyById(id);
     }
 
     @GET
-    @Path("/companies/{id}/office")
+    @Path("{id}/office")
     @Produces(MediaType.APPLICATION_JSON)
     public Office getOffice(@PathParam("id") String id){
         return companyService.getOffice(id);
     }
 
     @GET
-    @Path("/companies/{id}/office/address")
+    @Path("{id}/office/address")
     @Produces(MediaType.APPLICATION_JSON)
     public Address getAddress(@PathParam("id") String id){
         return companyService.getAddress(id);
     }
 
     @DELETE
-    @Path("/companies/{id}")
+    @Path("/{id}")
     public Response deleteCompany(@PathParam("id") String id){
         return companyService.deleteCompany(id);
     }
 
     @POST
-    @Path("/companies")
     @Consumes(MediaType.APPLICATION_JSON)
     public Response insertCompany(Company company, @Context UriInfo uriInfo){
         return companyService.insertCompany(company, uriInfo);
     }
 
     @PUT
-    @Path("/companies/{id}")
+    @Path("/{id}")
     public Response putCompany(@PathParam("id") String id, Company company){
         return companyService.putCompany(id, company);
     }

@@ -8,10 +8,8 @@ import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
 import com.project.mongodb.model.error.Error;
 import com.project.mongodb.repository.CompanyRepository;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
-
 import javax.inject.Inject;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
@@ -21,12 +19,15 @@ import java.util.List;
 
 import static com.mongodb.client.model.Sorts.descending;
 
+@Slf4j
 public class CompanyService {
-
-    private static final Logger logger = LoggerFactory.getLogger(CompanyService.class);
-
+    
+    private final CompanyRepository companyRepository;
+    
     @Inject
-    private CompanyRepository companyRepository;
+    public CompanyService(CompanyRepository companyRepository) {
+        this.companyRepository = companyRepository;
+    }
 
     public List<Company> getCompanies() {
         return companyRepository.getCompanies();
@@ -63,7 +64,7 @@ public class CompanyService {
         List<ObjectId> list = new ArrayList<>(20);
         companyRepository.getCompanies().forEach(company -> list.add(company.getId()));
 
-        logger.info("Searching company with id {}", id);
+        log.info("Searching company with id {}", id);
         boolean flag = false;
         for(ObjectId objectId : list) {
             if(objectId.toString().equals(new ObjectId(id).toString()))
@@ -71,10 +72,10 @@ public class CompanyService {
         }
 
         if(!flag) {
-            logger.warn("Company not found for id {}", id);
+            log.info("Company not found for id {}", id);
             throw new CompanyNotFoundException(new Error(id, "Company with id " + id + " was not found on this server"));
         } else {
-            logger.info("Deleting company with id {}", id);;
+            log.info("Deleting company with id {}", id);;
             companyRepository.deleteCompanyById(id);
 
             return Response
@@ -84,7 +85,7 @@ public class CompanyService {
     }
 
     public Response insertCompany(Company company, UriInfo uriInfo){
-        logger.info("Inserting company {} ", company);
+        log.info("Inserting company {} ", company);
 
         companyRepository.insertCompany(company);
 
@@ -115,7 +116,7 @@ public class CompanyService {
         }
 
         if(!flag) {
-            logger.info("Inserting company {} ", company);
+            log.info("Inserting company {} ", company);
 
             companyRepository.insertCompany(company);
 
@@ -123,7 +124,7 @@ public class CompanyService {
                     .status(Response.Status.CREATED)
                     .build();
         } else {
-            logger.info("Updating company with id {}", id);
+            log.info("Updating company with id {}", id);
 
             companyRepository.replaceCompany(id, company);
 

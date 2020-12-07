@@ -15,36 +15,35 @@ import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
 import com.project.mongodb.util.DataUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.bson.codecs.configuration.CodecRegistry;
 import org.bson.codecs.pojo.PojoCodecProvider;
 import org.bson.types.ObjectId;
-import org.slf4j.Logger;
-import org.slf4j.LoggerFactory;
 
 import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
-
-import static com.mongodb.client.model.Filters.*;
+import static com.mongodb.client.model.Filters.eq;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
+@Slf4j
 public class CompanyRepository {
-    private static final Logger logger = LoggerFactory.getLogger(CompanyRepository.class);
 
     private static final String DATABASE = "pojodb";
     private static final String COLLECTION = "companies";
     private static final String CONNECTION_STRING = "mongodb://localhost:27017";
+    private static final String ID = "_id";
 
-    private MongoCollection<Company> mongoCollection;
     private MongoClient mongoClient;
+    private MongoCollection<Company> mongoCollection;
 
     @PostConstruct
     public void init(){
         CodecRegistry codecRegistry = fromRegistries(MongoClientSettings.getDefaultCodecRegistry(),
                 fromProviders(PojoCodecProvider.builder().automatic(true).build()));
 
-        logger.info("Configuring MongoDb Client");
+        log.info("Configuring MongoDb Client");
         mongoClient = MongoClients.create(
                 MongoClientSettings.builder()
                         .codecRegistry(codecRegistry)
@@ -54,7 +53,7 @@ public class CompanyRepository {
         MongoDatabase mongoDatabase = mongoClient.getDatabase(DATABASE);
         mongoCollection = mongoDatabase.getCollection(COLLECTION, Company.class);
 
-        logger.info("Inserting default list of companies into the database");
+        log.info("Inserting default list of companies into the database");
         List<Company> companies = DataUtil.getCompaniesFromJsonFile();
         if (companies != null)
             companies.forEach(company -> mongoCollection.insertOne(company));
@@ -83,7 +82,7 @@ public class CompanyRepository {
     public Company getCompanyById(String id){
         try {
             return mongoCollection
-                    .find(eq("_id", new ObjectId(id)))
+                    .find(eq(ID, new ObjectId(id)))
                     .first();
         } catch(IllegalArgumentException e) {
             return null;
@@ -105,7 +104,7 @@ public class CompanyRepository {
     }
 
     public void deleteCompanyById(String id){
-        mongoCollection.deleteOne(eq("_id", new ObjectId(id)));
+        mongoCollection.deleteOne(eq(ID, new ObjectId(id)));
     }
 
     public void insertCompany(Company company){
@@ -113,7 +112,7 @@ public class CompanyRepository {
     }
 
     public void replaceCompany(String id, Company company){
-       mongoCollection.replaceOne(eq("_id", new ObjectId(id)), company);
+       mongoCollection.replaceOne(eq(ID, new ObjectId(id)), company);
     }
 
     @PreDestroy
