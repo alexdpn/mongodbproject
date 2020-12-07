@@ -16,9 +16,9 @@
 
   },
   {
-    "name":"Beer Ltd.",
+    "name":"Cars Ltd.",
     "ceo":"Mary",
-    "areaOfActivity":"beer",
+    "areaOfActivity":"car dealer",
     "office":{
       "address":{
         "country":"Canada",
@@ -32,14 +32,14 @@
 
   },
   {
-    "name":"Red Wine Inc.",
+    "name":"HealthApp Inc.",
     "ceo":"Louis",
-    "areaOfActivity":"production of wine",
+    "areaOfActivity":"production of applications for hospitals",
     "office":{
       "address":{
         "country":"Germany",
         "city":"Berlin",
-        "street":"Beer Street, Nr. 200B"
+        "street":"Health Street, Nr. 200B"
 
       },
       "numberOfWorkers":300
