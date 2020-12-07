@@ -8,12 +8,14 @@ import com.project.mongodb.model.Office;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
-import org.junit.*;
 
-import static org.junit.Assert.*;
-import static com.mongodb.client.model.Sorts.*;
+import static com.mongodb.client.model.Sorts.descending;
+import static org.junit.Assert.assertEquals;
 
 import org.glassfish.jersey.server.ResourceConfig;
+import org.junit.AfterClass;
+import org.junit.BeforeClass;
+import org.junit.Test;
 
 import javax.ws.rs.client.Client;
 import javax.ws.rs.client.ClientBuilder;
@@ -25,17 +27,18 @@ import javax.ws.rs.core.MediaType;
 import java.net.URI;
 import java.util.List;
 
-public class RestMongoTest {
+public class CompanyControllerTest {
 
     private static URI uri;
     private static HttpServer server;
-    private static CompanyRepository companyRepository;
     private static Client client;
     private static WebTarget target;
+    private static CompanyRepository companyRepository;
 
     @BeforeClass
     public static void startHttpServer(){
         uri = UriBuilder.fromUri("http://localhost/").port(4000).build();
+
         ResourceConfig config = new ResourceConfig(CompanyController.class);
         config.register(new CompanyBinder());
         config.register(JacksonFeature.class);
@@ -44,13 +47,13 @@ public class RestMongoTest {
         EmbeddedMongoDbHelper.startDatabase();
 
         companyRepository = new CompanyRepository();
+        companyRepository.init();
 
         client = ClientBuilder.newBuilder()
                               .register(JacksonFeature.class)
                               .build();
 
-        target = client.target(uri).path("app");
-
+        target = client.target(uri).path("app/v1");
     }
 
     @Test
