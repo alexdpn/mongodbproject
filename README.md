@@ -1,7 +1,7 @@
 # REST API built with Jersey and MongoDB
 
 Description
-* the database consists of details about several fictional companies.
+* the database consists of details about several fictional companies
 * dependency injection using HK2 framework
 * created tests with JUnit
 
@@ -21,4 +21,4 @@ docker build --tag mongodbproject:1.0 .
 ```
 docker run --network host -d mongodbproject:1.0
 ```
-6. Access the endpoints
+6. Access the endpoints using the port 4000
