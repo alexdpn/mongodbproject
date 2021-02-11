@@ -11,6 +11,7 @@ import org.glassfish.jersey.linking.InjectLinks;
 
 import static org.glassfish.jersey.linking.InjectLink.Style;
 
+import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
 import java.util.List;
 
@@ -19,9 +20,16 @@ public class Company {
     @JsonSerialize(using = JsonConfiguration.ObjectIdSerializer.class)
     private ObjectId id;
 
+    @NotNull
     private String name;
+
+    @NotNull
     private String ceo;
+
+    @NotNull
     private String areaOfActivity;
+
+    @NotNull
     private Office office;
 
     @InjectLinks({
@@ -109,5 +117,4 @@ public class Company {
                 + ", areaOfActivity: " + this.areaOfActivity
                 + ", office: " + this.office;
     }
-
 }
