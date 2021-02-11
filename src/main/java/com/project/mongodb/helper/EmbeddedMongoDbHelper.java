@@ -8,7 +8,9 @@ import de.flapdoodle.embed.mongo.config.MongodConfigBuilder;
 import de.flapdoodle.embed.mongo.config.Net;
 import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
+import lombok.extern.slf4j.Slf4j;
 
+@Slf4j
 public class EmbeddedMongoDbHelper {
 
     private static final String HOST = "localhost";
@@ -27,11 +29,8 @@ public class EmbeddedMongoDbHelper {
         try {
             executable = starter.prepare(createConfiguration());
             MongodProcess process = executable.start();
-            System.out.println(process.getProcessId());
-            System.out.println(process.isProcessRunning());
         }catch (Exception e) {
-            //do something
-            e.printStackTrace();
+            log.error("Error during database initialization", e);
         }
     }
 
