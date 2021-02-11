@@ -9,7 +9,7 @@ import lombok.ToString;
 @ToString
 @AllArgsConstructor
 @NoArgsConstructor
-public class Error {
+public class ResponseMessage {
     private String companyId;
-    private String errorMessage;
+    private String responseMessageError;
 }
