@@ -6,7 +6,7 @@ import com.project.mongodb.exception.OfficeNotFoundException;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
-import com.project.mongodb.model.error.Error;
+import com.project.mongodb.model.error.ResponseMessage;
 import com.project.mongodb.repository.CompanyRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.bson.types.ObjectId;
@@ -37,7 +37,7 @@ public class CompanyService {
         Company company = companyRepository.getCompanyById(id);
 
         if(company == null)
-            throw new CompanyNotFoundException(new Error(id, "Company with id " + id + " was not found on this server"));
+            throw new CompanyNotFoundException(new ResponseMessage(id, "Company with id " + id + " was not found on this server"));
 
         return company;
     }
@@ -46,7 +46,7 @@ public class CompanyService {
         Office office = companyRepository.getOffice(id);
 
         if(office == null)
-            throw new OfficeNotFoundException(new Error(id, "Office was not found for company with id " + id));
+            throw new OfficeNotFoundException(new ResponseMessage(id, "Office was not found for company with id " + id));
 
         return office;
     }
@@ -55,7 +55,7 @@ public class CompanyService {
         Address address = companyRepository.getAddress(id);
 
         if(address == null)
-            throw new AddressNotFoundException(new Error(id, "Address was not found for company with id " + id));
+            throw new AddressNotFoundException(new ResponseMessage(id, "Address was not found for company with id " + id));
 
         return companyRepository.getAddress(id);
     }
@@ -73,7 +73,7 @@ public class CompanyService {
 
         if(!flag) {
             log.info("Company not found for id {}", id);
-            throw new CompanyNotFoundException(new Error(id, "Company with id " + id + " was not found on this server"));
+            throw new CompanyNotFoundException(new ResponseMessage(id, "Company with id " + id + " was not found on this server"));
         } else {
             log.info("Deleting company with id {}", id);;
             companyRepository.deleteCompanyById(id);
