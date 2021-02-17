@@ -6,7 +6,9 @@ import com.project.mongodb.helper.EmbeddedMongoDbHelper;
 
 import javax.ws.rs.core.UriBuilder;
 
+import com.project.mongodb.security.SecurityConfiguration;
 import lombok.extern.slf4j.Slf4j;
+import org.glassfish.grizzly.ssl.SSLEngineConfigurator;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
@@ -21,7 +23,7 @@ public class RestApp {
 
     public static void main(String[] args) {
         log.info("Configuring Jersey");
-        URI uri = UriBuilder.fromUri("http://localhost/").port(4000).build();
+        URI uri = UriBuilder.fromUri("https://localhost/").port(8443).build();
         ResourceConfig resourceConfig = new ResourceConfig(CompanyController.class);
         resourceConfig.register(new CompanyBinder());
         resourceConfig.register(DeclarativeLinkingFeature.class);
@@ -31,6 +33,14 @@ public class RestApp {
         EmbeddedMongoDbHelper.startDatabase();
 
         log.info("Starting embedded http server on port {}", uri.getPort());
-        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(uri, resourceConfig);
+        HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(
+                uri,
+                resourceConfig,
+                true,
+                new SSLEngineConfigurator(
+                        SecurityConfiguration.sslContextConfigurator())
+                        .setClientMode(false)
+                        .setNeedClientAuth(false)
+        );
     }
 }
