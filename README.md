@@ -21,4 +21,4 @@ docker build --tag mongodbproject:1.0 .
 ```
 docker run --network host -d mongodbproject:1.0
 ```
-6. Access the endpoints using the port 4000
+6. Access the endpoints using the port 8443
