@@ -3,13 +3,12 @@ package com.project.mongodb.filter;
 import javax.ws.rs.container.ContainerRequestContext;
 import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
-import java.io.IOException;
 import java.util.Base64;
 
 public class BasicAuthenticationFilter implements ContainerRequestFilter {
 
     @Override
-    public void filter(ContainerRequestContext requestContext) throws IOException {
+    public void filter(ContainerRequestContext requestContext) {
         if(!checkBasicAuthCredentials(requestContext)) {
             requestContext.abortWith(Response
                     .status(Response.Status.UNAUTHORIZED)
