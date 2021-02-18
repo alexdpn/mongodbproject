@@ -2,6 +2,7 @@ package com.project.mongodb;
 
 import com.project.mongodb.config.CompanyBinder;
 import com.project.mongodb.controller.CompanyController;
+import com.project.mongodb.filter.BasicAuthenticationFilter;
 import com.project.mongodb.helper.EmbeddedMongoDbHelper;
 
 import javax.ws.rs.core.UriBuilder;
@@ -28,6 +29,7 @@ public class RestApp {
         resourceConfig.register(new CompanyBinder());
         resourceConfig.register(DeclarativeLinkingFeature.class);
         resourceConfig.register(JacksonFeature.class);
+        resourceConfig.register(BasicAuthenticationFilter.class);
 
         log.info("Starting embedded database");
         EmbeddedMongoDbHelper.startDatabase();
