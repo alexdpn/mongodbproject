@@ -4,6 +4,7 @@ Description
 * the database consists of details about several fictional companies
 * dependency injection using HK2 framework
 * created tests with JUnit
+* basic authentication over https
 
 # Project Setup
 
