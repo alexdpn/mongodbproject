@@ -43,7 +43,7 @@ public class CompanyService {
     }
 
     public Office getOffice(String id) throws OfficeNotFoundException {
-        Office office = companyRepository.getOffice(id);
+        Office office = companyRepository.getOfficeByCompanyId(id);
 
         if(office == null)
             throw new OfficeNotFoundException(new ResponseMessage(id, "Office was not found for company with id " + id));
@@ -52,12 +52,12 @@ public class CompanyService {
     }
 
     public Address getAddress(String id) throws AddressNotFoundException {
-        Address address = companyRepository.getAddress(id);
+        Address address = companyRepository.getAddressByCompanyId(id);
 
         if(address == null)
             throw new AddressNotFoundException(new ResponseMessage(id, "Address was not found for company with id " + id));
 
-        return companyRepository.getAddress(id);
+        return companyRepository.getAddressByCompanyId(id);
     }
 
     public Response deleteCompany(String id) throws CompanyNotFoundException {

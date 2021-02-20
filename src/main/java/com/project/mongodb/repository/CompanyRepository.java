@@ -89,15 +89,15 @@ public class CompanyRepository {
         }
     }
 
-    public Office getOffice(String id){
+    public Office getOfficeByCompanyId(String id){
         if(getCompanyById(id) == null || getCompanyById(id).getOffice() == null)
             return null;
 
         return getCompanyById(id).getOffice();
     }
 
-    public Address getAddress(String id){
-        if(getOffice(id) == null || getOffice(id).getAddress() == null)
+    public Address getAddressByCompanyId(String id){
+        if(getOfficeByCompanyId(id) == null || getOfficeByCompanyId(id).getAddress() == null)
             return null;
 
         return getCompanyById(id).getOffice().getAddress();
