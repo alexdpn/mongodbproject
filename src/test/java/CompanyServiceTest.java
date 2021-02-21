@@ -77,7 +77,7 @@ public class CompanyServiceTest {
 
     @Test(expected = OfficeNotFoundException.class)
     public void testGetOfficeWithOfficeNotFoundException() {
-        lenient().when(companyRepository.getOfficeByCompanyId("3")).thenReturn(null);
+        when(companyRepository.getOfficeByCompanyId("3")).thenReturn(null);
 
         companyService.getOffice("3");
     }
