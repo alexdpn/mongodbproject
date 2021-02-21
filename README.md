@@ -24,4 +24,4 @@ docker run --network host -d mongodbproject:1.0
 ```
 6. Access the endpoints using the port 8443 and the https protocol
 
-7. The credetials for the basic authentication are the folowing: **jersey** for username and **pass12** for password
+7. The credetials for the basic authentication are the following: **jersey** for username and **pass12** for password
