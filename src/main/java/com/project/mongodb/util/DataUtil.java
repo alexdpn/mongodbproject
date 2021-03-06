@@ -8,8 +8,9 @@ import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.List;
 
+import static com.project.mongodb.util.Constants.PATH;
+
 public class DataUtil {
-    private static final String PATH = "/META-INF/companies.json";
 
     public static List<Company> getCompaniesFromJsonFile() {
         List<Company> list = new ArrayList<>(5);
