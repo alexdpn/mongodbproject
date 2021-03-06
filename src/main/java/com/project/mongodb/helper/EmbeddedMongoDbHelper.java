@@ -10,10 +10,11 @@ import de.flapdoodle.embed.mongo.distribution.Version;
 import de.flapdoodle.embed.process.runtime.Network;
 import lombok.extern.slf4j.Slf4j;
 
+import static com.project.mongodb.util.Constants.HOST;
+
 @Slf4j
 public class EmbeddedMongoDbHelper {
 
-    private static final String HOST = "localhost";
     private static final int PORT = 27017;
     private static MongodExecutable executable;
 

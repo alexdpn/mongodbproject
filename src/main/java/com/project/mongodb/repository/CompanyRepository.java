@@ -24,16 +24,12 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import static com.mongodb.client.model.Filters.eq;
+import static com.project.mongodb.util.Constants.*;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
 @Slf4j
 public class CompanyRepository {
-
-    private static final String DATABASE = "pojodb";
-    private static final String COLLECTION = "companies";
-    private static final String CONNECTION_STRING = "mongodb://localhost:27017";
-    private static final String ID = "_id";
 
     private MongoClient mongoClient;
     private MongoCollection<Company> mongoCollection;

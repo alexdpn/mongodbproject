@@ -7,6 +7,6 @@ import lombok.NoArgsConstructor;
 @NoArgsConstructor
 public class SecurityProperties {
     //the password should be put in environment variables but we'll keep it simple
-    private String keystorePath = "src/main/resources/META-INF/security/keystore.jks";
+    private String keystorePath = "/META-INF/security/keystore.jks";
     private String keyStorePassword = "pass123";
 }

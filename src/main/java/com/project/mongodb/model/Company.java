@@ -9,7 +9,8 @@ import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
-import static org.glassfish.jersey.linking.InjectLink.Style;
+import static com.project.mongodb.util.Constants.SELF;
+import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 
 import javax.validation.constraints.NotNull;
 import javax.ws.rs.core.Link;
@@ -32,23 +33,11 @@ public class Company {
     @NotNull
     private Office office;
 
-    @InjectLinks({
-            @InjectLink(
-                    resource= CompanyController.class,
-                    method="getCompanyById",
-                    style= Style.ABSOLUTE,
-                    rel="self"),
-            @InjectLink(
-                    resource= CompanyController.class,
-                    method="getOffice",
-                    style= Style.ABSOLUTE,
-                    rel="self"),
-            @InjectLink(
-                    resource= CompanyController.class,
-                    method="getAddress",
-                    style= Style.ABSOLUTE,
-                    rel="self")})
     @BsonIgnore
+    @InjectLinks({
+            @InjectLink(resource= CompanyController.class, method="getCompanyById", style= ABSOLUTE, rel=SELF),
+            @InjectLink(resource= CompanyController.class, method="getOffice", style= ABSOLUTE, rel=SELF),
+            @InjectLink(resource= CompanyController.class, method="getAddress", style= ABSOLUTE, rel=SELF)})
     @JsonIgnoreProperties({ "uriBuilder", "params", "type", "rels", "title"})
     private List<Link> links;
 
