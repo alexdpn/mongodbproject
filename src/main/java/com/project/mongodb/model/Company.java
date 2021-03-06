@@ -9,6 +9,7 @@ import org.bson.types.ObjectId;
 import org.glassfish.jersey.linking.InjectLink;
 import org.glassfish.jersey.linking.InjectLinks;
 
+import static com.project.mongodb.util.Constants.SELF;
 import static org.glassfish.jersey.linking.InjectLink.Style.ABSOLUTE;
 
 import javax.validation.constraints.NotNull;
@@ -16,7 +17,6 @@ import javax.ws.rs.core.Link;
 import java.util.List;
 
 public class Company {
-    private static final String SELF = "self";
 
     @JsonSerialize(using = JsonConfiguration.ObjectIdSerializer.class)
     private ObjectId id;
