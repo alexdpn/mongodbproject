@@ -26,10 +26,10 @@ public class RestApp {
         log.info("Configuring Jersey");
         URI uri = UriBuilder.fromUri("https://localhost/").port(8443).build();
         ResourceConfig resourceConfig = new ResourceConfig(CompanyController.class);
-        resourceConfig.register(new CompanyBinder());
-        resourceConfig.register(DeclarativeLinkingFeature.class);
-        resourceConfig.register(JacksonFeature.class);
-        resourceConfig.register(BasicAuthenticationFilter.class);
+        resourceConfig.register(new CompanyBinder())
+                .register(DeclarativeLinkingFeature.class)
+                .register(JacksonFeature.class)
+                .register(BasicAuthenticationFilter.class);
 
         log.info("Starting embedded database");
         EmbeddedMongoDbHelper.startDatabase();

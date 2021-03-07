@@ -1,11 +1,12 @@
 package com.project.mongodb.security;
 
 import lombok.extern.slf4j.Slf4j;
-import org.apache.commons.io.IOUtils;
 import org.glassfish.grizzly.ssl.SSLContextConfigurator;
 
 import java.io.IOException;
 import java.io.InputStream;;
+
+import static org.apache.commons.io.IOUtils.toByteArray;
 
 @Slf4j
 public class SecurityConfiguration {
@@ -22,10 +23,8 @@ public class SecurityConfiguration {
     }
 
     private static byte[] getKeystoreAsByteArray(String path) {
-        try {
-            InputStream inputStream = SecurityConfiguration.class.getResourceAsStream(path);
-
-            return IOUtils.toByteArray(inputStream);
+        try(InputStream inputStream = SecurityConfiguration.class.getResourceAsStream(path)) {
+            return toByteArray(inputStream);
         } catch(IOException exception) {
             log.error("Error while processing keystore");
             return null;
