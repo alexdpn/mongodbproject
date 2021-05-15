@@ -41,6 +41,7 @@ public class Company {
     @JsonIgnoreProperties({ "uriBuilder", "params", "type", "rels", "title"})
     private List<Link> links;
 
+    // needed by Jackson
     public Company(){}
 
     public Company(String name, String ceo, String areaOfActivity, Office office) {

@@ -19,12 +19,15 @@ import org.glassfish.grizzly.http.server.HttpServer;
 
 import java.net.URI;
 
+import static com.project.mongodb.util.Constants.HTTPS_HOST;
+import static com.project.mongodb.util.Constants.PORT;
+
 @Slf4j
 public class RestApp {
 
     public static void main(String[] args) {
         log.info("Configuring Jersey");
-        URI uri = UriBuilder.fromUri("https://localhost/").port(8443).build();
+        URI uri = UriBuilder.fromUri(HTTPS_HOST).port(PORT).build();
         ResourceConfig resourceConfig = new ResourceConfig(CompanyController.class);
         resourceConfig.register(new CompanyBinder())
                 .register(DeclarativeLinkingFeature.class)
@@ -34,7 +37,7 @@ public class RestApp {
         log.info("Starting embedded database");
         EmbeddedMongoDbHelper.startDatabase();
 
-        log.info("Starting embedded http server on port {}", uri.getPort());
+        log.info("Starting embedded https server on port {}", uri.getPort());
         HttpServer httpServer = GrizzlyHttpServerFactory.createHttpServer(
                 uri,
                 resourceConfig,

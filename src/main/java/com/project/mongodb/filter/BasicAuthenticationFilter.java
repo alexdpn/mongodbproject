@@ -21,6 +21,7 @@ public class BasicAuthenticationFilter implements ContainerRequestFilter {
     }
 
     private boolean checkBasicAuthCredentials(ContainerRequestContext request) {
+        // the credentials should be placed in a properties file but we'll keep it simple here
         String hashedCredentials = "Basic " + Base64.getEncoder().encodeToString("jersey:pass12".getBytes());
         String authorizationHeader = request.getHeaderString(AUTHORIZATION);
 

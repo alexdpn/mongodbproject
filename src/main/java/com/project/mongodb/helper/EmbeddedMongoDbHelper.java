@@ -11,17 +11,20 @@ import de.flapdoodle.embed.process.runtime.Network;
 import lombok.extern.slf4j.Slf4j;
 
 import static com.project.mongodb.util.Constants.HOST;
+import static com.project.mongodb.util.Constants.MONGODB_PORT;
 
 @Slf4j
 public class EmbeddedMongoDbHelper {
 
-    private static final int PORT = 27017;
+
     private static MongodExecutable executable;
+
+    private EmbeddedMongoDbHelper () {}
 
     public static IMongodConfig createConfiguration() throws Exception{
         return new MongodConfigBuilder()
                 .version(Version.Main.V4_0)
-                .net(new Net(HOST, PORT, Network.localhostIsIPv6()))
+                .net(new Net(HOST, MONGODB_PORT, Network.localhostIsIPv6()))
                 .build();
     }
 

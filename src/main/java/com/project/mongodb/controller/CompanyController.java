@@ -12,7 +12,6 @@ import javax.ws.rs.Path;
 import javax.ws.rs.PathParam;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.Context;
-import javax.ws.rs.core.MediaType;
 import javax.ws.rs.core.Response;
 import javax.ws.rs.core.UriInfo;
 
@@ -20,6 +19,8 @@ import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
 import com.project.mongodb.service.CompanyService;
+
+import static javax.ws.rs.core.MediaType.APPLICATION_JSON;
 
 @Path("/app/v1/companies")
 public class CompanyController {
@@ -32,28 +33,28 @@ public class CompanyController {
     }
 
     @GET
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
     public List<Company> getCompanies() {
         return companyService.getCompanies();
     }
 
     @GET
     @Path("/{id}")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
     public Company getCompanyById(@PathParam("id") String id){
         return companyService.getCompanyById(id);
     }
 
     @GET
     @Path("{id}/office")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
     public Office getOffice(@PathParam("id") String id){
         return companyService.getOffice(id);
     }
 
     @GET
     @Path("{id}/office/address")
-    @Produces(MediaType.APPLICATION_JSON)
+    @Produces(APPLICATION_JSON)
     public Address getAddress(@PathParam("id") String id){
         return companyService.getAddress(id);
     }
@@ -65,13 +66,14 @@ public class CompanyController {
     }
 
     @POST
-    @Consumes(MediaType.APPLICATION_JSON)
+    @Consumes(APPLICATION_JSON)
     public Response insertCompany(Company company, @Context UriInfo uriInfo){
         return companyService.insertCompany(company, uriInfo);
     }
 
     @PUT
     @Path("/{id}")
+    @Consumes(APPLICATION_JSON)
     public Response putCompany(@PathParam("id") String id, Company company){
         return companyService.putCompany(id, company);
     }

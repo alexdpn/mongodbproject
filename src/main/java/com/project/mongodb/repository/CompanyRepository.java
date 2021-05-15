@@ -24,7 +24,10 @@ import javax.annotation.PostConstruct;
 import javax.annotation.PreDestroy;
 
 import static com.mongodb.client.model.Filters.eq;
-import static com.project.mongodb.util.Constants.*;
+import static com.project.mongodb.util.Constants.COLLECTION;
+import static com.project.mongodb.util.Constants.CONNECTION_STRING;
+import static com.project.mongodb.util.Constants.DATABASE;
+import static com.project.mongodb.util.Constants.ID;
 import static org.bson.codecs.configuration.CodecRegistries.fromProviders;
 import static org.bson.codecs.configuration.CodecRegistries.fromRegistries;
 
@@ -55,8 +58,7 @@ public class CompanyRepository {
             companies.forEach(company -> mongoCollection.insertOne(company));
     }
 
-    public CompanyRepository(){
-    }
+    public CompanyRepository() {}
 
     public MongoCollection<Company> getMongoCollection() {
         return this.mongoCollection;
