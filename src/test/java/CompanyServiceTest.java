@@ -5,7 +5,7 @@ import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
 import com.project.mongodb.repository.CompanyRepository;
-import com.project.mongodb.service.CompanyService;
+import com.project.mongodb.service.impl.CompanyServiceImpl;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
@@ -27,7 +27,7 @@ public class CompanyServiceTest {
     private CompanyRepository companyRepository;
 
     @InjectMocks
-    private CompanyService companyService;
+    private CompanyServiceImpl companyService;
 
     private Company company1;
     private Company company2;

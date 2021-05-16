@@ -2,15 +2,13 @@ import com.project.mongodb.config.CompanyBinder;
 import com.project.mongodb.controller.CompanyController;
 import com.project.mongodb.helper.EmbeddedMongoDbHelper;
 import com.project.mongodb.repository.CompanyRepository;
+import com.project.mongodb.repository.impl.CompanyRepositoryImpl;
 import com.project.mongodb.model.Address;
 import com.project.mongodb.model.Company;
 import com.project.mongodb.model.Office;
 import org.glassfish.grizzly.http.server.HttpServer;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
-
-import static com.mongodb.client.model.Sorts.descending;
-import static org.junit.Assert.assertEquals;
 
 import org.glassfish.jersey.server.ResourceConfig;
 import org.junit.AfterClass;
@@ -26,6 +24,9 @@ import javax.ws.rs.core.MediaType;
 
 import java.net.URI;
 import java.util.List;
+
+import static com.mongodb.client.model.Sorts.descending;
+import static org.junit.Assert.assertEquals;
 
 public class CompanyControllerTest {
 
@@ -46,7 +47,7 @@ public class CompanyControllerTest {
 
         EmbeddedMongoDbHelper.startDatabase();
 
-        companyRepository = new CompanyRepository();
+        companyRepository = new CompanyRepositoryImpl();
         companyRepository.init();
 
         client = ClientBuilder.newBuilder()
