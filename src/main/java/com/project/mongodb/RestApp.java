@@ -1,26 +1,23 @@
 package com.project.mongodb;
 
-import com.project.mongodb.config.CompanyBinder;
-import com.project.mongodb.controller.CompanyController;
-import com.project.mongodb.filter.BasicAuthenticationFilter;
-import com.project.mongodb.helper.EmbeddedMongoDbHelper;
-
 import javax.ws.rs.core.UriBuilder;
-
-import com.project.mongodb.security.SecurityConfiguration;
 import lombok.extern.slf4j.Slf4j;
 import org.glassfish.grizzly.ssl.SSLEngineConfigurator;
 import org.glassfish.jersey.grizzly2.httpserver.GrizzlyHttpServerFactory;
 import org.glassfish.jersey.jackson.JacksonFeature;
 import org.glassfish.jersey.linking.DeclarativeLinkingFeature;
 import org.glassfish.jersey.server.ResourceConfig;
-
 import org.glassfish.grizzly.http.server.HttpServer;
-
 import java.net.URI;
 
-import static com.project.mongodb.util.Constants.HTTPS_HOST;
+import com.project.mongodb.config.CompanyBinder;
+import com.project.mongodb.controller.CompanyController;
+import com.project.mongodb.helper.EmbeddedMongoDbHelper;
+
 import static com.project.mongodb.util.Constants.PORT;
+import static com.project.mongodb.util.Constants.HTTPS_HOST;
+import static com.project.mongodb.security.SecurityConfiguration.BasicAuthenticationFilter;
+import static com.project.mongodb.security.SecurityConfiguration.HttpsConfiguration.sslContextConfigurator;
 
 @Slf4j
 public class RestApp {
@@ -42,8 +39,7 @@ public class RestApp {
                 uri,
                 resourceConfig,
                 true,
-                new SSLEngineConfigurator(
-                        SecurityConfiguration.sslContextConfigurator())
+                new SSLEngineConfigurator(sslContextConfigurator())
                         .setClientMode(false)
                         .setNeedClientAuth(false)
         );
