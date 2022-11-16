@@ -91,7 +91,8 @@ public class CompanyRepositoryImpl implements CompanyRepository {
                     .find(eq(ID, new ObjectId(id)))
                     .first();
         } catch(IllegalArgumentException e) {
-            return null;
+            log.error("Company not found for id " + id, e);
+            throw e;
         }
     }
 
