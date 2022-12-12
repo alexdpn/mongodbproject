@@ -37,7 +37,7 @@ public class CompanyControllerTest {
     private static CompanyRepository companyRepository;
 
     @BeforeClass
-    public static void startHttpServer(){
+    public static void startHttpServer() throws Exception {
         uri = UriBuilder.fromUri("http://localhost/").port(4000).build();
 
         ResourceConfig config = new ResourceConfig(CompanyController.class);

@@ -22,7 +22,7 @@ import static com.project.mongodb.security.SecurityConfiguration.HttpsConfigurat
 @Slf4j
 public class RestApp {
 
-    public static void main(String[] args) {
+    public static void main(String[] args) throws Exception {
         log.info("Configuring Jersey");
         URI uri = UriBuilder.fromUri(HTTPS_HOST).port(PORT).build();
         ResourceConfig resourceConfig = new ResourceConfig(CompanyController.class);

@@ -28,13 +28,14 @@ public class EmbeddedMongoDbHelper {
                 .build();
     }
 
-    public static void startDatabase() {
+    public static void startDatabase() throws Exception {
         MongodStarter starter = MongodStarter.getDefaultInstance();
         try {
             executable = starter.prepare(createConfiguration());
             MongodProcess process = executable.start();
         }catch (Exception e) {
             log.error("Error during database initialization", e);
+            throw e;
         }
     }
 

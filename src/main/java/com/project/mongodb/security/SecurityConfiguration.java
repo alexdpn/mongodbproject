@@ -10,6 +10,7 @@ import javax.ws.rs.container.ContainerRequestFilter;
 import javax.ws.rs.core.Response;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.charset.StandardCharsets;
 import java.util.Base64;;
 
 import static javax.ws.rs.core.HttpHeaders.AUTHORIZATION;
@@ -21,7 +22,7 @@ public class SecurityConfiguration {
 
     public static class HttpsConfiguration {
 
-        public static SSLContextConfigurator sslContextConfigurator() {
+        public static SSLContextConfigurator sslContextConfigurator() throws IOException {
             SecurityProperties securityProperties = new SecurityProperties();
             SSLContextConfigurator sslContextConfigurator = new SSLContextConfigurator();
             byte[] keyStoreAsByteArray = getKeystoreAsByteArray(securityProperties.getKeystorePath());
@@ -32,20 +33,20 @@ public class SecurityConfiguration {
             return sslContextConfigurator;
         }
 
-        private static byte[] getKeystoreAsByteArray(String path) {
+        private static byte[] getKeystoreAsByteArray(String path) throws IOException {
             try (InputStream inputStream = SecurityConfiguration.class.getResourceAsStream(path)) {
                 return toByteArray(inputStream);
             } catch (IOException exception) {
                 log.error("Error while processing keystore");
-                return null;
+                throw exception;
             }
         }
 
         @Data
         @NoArgsConstructor
         private static class SecurityProperties {
-            //the password should be put in a properties file but we'll keep it simple
             private String keystorePath = "/META-INF/security/keystore.jks";
+            //the password should be placed in a properties file or in Vault but we'll keep it simple; passwords do not belong in code!!
             private String keyStorePassword = "pass123";
         }
     }
@@ -63,11 +64,12 @@ public class SecurityConfiguration {
         }
 
         private boolean checkBasicAuthCredentials(ContainerRequestContext request) {
-            // the credentials should be placed in a properties file but we'll keep it simple here
-            String hashedCredentials = "Basic " + Base64.getEncoder().encodeToString("jersey:pass12".getBytes());
+            // the hashed credentials should be placed in a properties file or in Vault but we'll keep it simple; credentials do not belong in code!!
+            String hashedCredentials = "Basic amVyc2V5OnBhc3MxMg==";
             String authorizationHeader = request.getHeaderString(AUTHORIZATION);
+            String incomingCredentials = Base64.getEncoder().encodeToString(authorizationHeader.getBytes(StandardCharsets.UTF_8));
 
-            return hashedCredentials.equals(authorizationHeader);
+            return hashedCredentials.equals(incomingCredentials);
         }
     }
 
